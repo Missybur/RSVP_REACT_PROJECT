@@ -1,4 +1,5 @@
-## React RSVP Project 
+# React RSVP Project 
 
-# npm install
-# npm start
+Run:
+## npm install
+## npm start
