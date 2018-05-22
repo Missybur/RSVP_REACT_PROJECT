@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
 import './App.css';
-import GuestList from './GuestList';
-import Counter from './Counter';
+
+import Header from './Header';
+import MainContent from './MainContent';
 
 class App extends Component {
 
@@ -10,17 +11,17 @@ class App extends Component {
     pendingGuest: "",
     guests: [
       {
-        name: 'Treasure',
+        name: 'Ellie',
         isConfirmed: false,
         isEditing: false
       },
       {
-        name: 'Nic',
+        name: 'Angie',
         isConfirmed: true,
         isEditing: false
       },
       {
-        name: 'Matt K',
+        name: 'Debbie',
         isConfirmed: false,
         isEditing: true
       }
@@ -43,16 +44,16 @@ class App extends Component {
   toggleConfirmationAt = index =>
     this.toggleGuestPropertyAt("isConfirmed", index);
 
-  toggleEditingAt = index =>
-    this.toggleGuestPropertyAt("isEditing", index);
-
   removeGuestAt = index =>
     this.setState({
       guests: [
         ...this.state.guests.slice(0, index),
-        ...this.state.guests.slice(index +1)
+        ...this.state.guests.slice(index + 1)
       ]
-    })
+    });
+
+  toggleEditingAt = index =>
+    this.toggleGuestPropertyAt("isEditing", index);
 
   setNameAt = (name, indexToChange) =>
     this.setState({
@@ -77,18 +78,19 @@ class App extends Component {
     e.preventDefault();
     this.setState({
       guests: [
-      {
-        name: this.state.pendingGuest,
-        isConfirmed: false,
-        isEditing: false
-      },
-      ...this.state.guests
+        {
+          name: this.state.pendingGuest,
+          isConfirmed: false,
+          isEditing: false
+        },
+        ...this.state.guests
       ],
       pendingGuest: ''
     });
   }
 
   getTotalInvited = () => this.state.guests.length;
+
   getAttendingGuests = () =>
     this.state.guests.reduce(
       (total, guest) => guest.isConfirmed ? total + 1 : total,
@@ -102,44 +104,24 @@ class App extends Component {
 
     return (
       <div className="App">
-        <header>
-          <h1>RSVP</h1>
-          <p>A React App</p>
-          <form onSubmit={this.newGuestSubmitHandler}>
-            <input
-            type="text"
-            onChange={this.handleNameInput}
-            value={this.state.pendingGuest}
-            placeholder="Invite Someone" />
-            <button type="submit" name="submit" value="submit">Submit</button>
-          </form>
-        </header>
-        <div className="main">
-          <div>
-            <h2>Invitees</h2>
-            <label>
-              <input
-                type="checkbox"
-                onChange={this.toggleFilter}
-                checked={this.state.isFiltered} /> Hide those who haven't responded
-            </label>
-          </div>
-          <Counter
-            totalInvited={totalInvited}
-            numberAttending={numberAttending}
-            numberUnconfirmed={numberUnconfirmed} />
-
-          <GuestList
-            guests={this.state.guests}
-            toggleConfirmationAt={this.toggleConfirmationAt}
-            toggleEditingAt={this.toggleEditingAt}
-            setNameAt={this.setNameAt}
-            isFiltered={this.state.isFiltered}
-            removeGuestAt={this.removeGuestAt}
-            pendingGuest={this.state.pendingGuest}
-          />
-
-        </div>
+        <Header
+          newGuestSubmitHandler={this.newGuestSubmitHandler}
+          pendingGuest={this.state.pendingGuest}
+          handleNameInput={this.handleNameInput}
+        />
+        <MainContent
+          toggleFilter={this.toggleFilter}
+          isFiltered={this.state.isFiltered}
+          totalInvited={totalInvited}
+          numberAttending={numberAttending}
+          numberUnconfirmed={numberUnconfirmed}
+          guests={this.state.guests}
+          toggleConfirmationAt={this.toggleConfirmationAt}
+          toggleEditingAt={this.toggleEditingAt}
+          setNameAt={this.setNameAt}
+          removeGuestAt={this.removeGuestAt}
+          pendingGuest={this.state.pendingGuest}
+        />
       </div>
     );
   }
